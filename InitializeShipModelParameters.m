@@ -14,11 +14,11 @@ N = 12; % [deg/s]
 PB = 5; % [deg]
 deltaMax = 35; % [deg]
 
-rudderAngle = timeseries([0,0,5,5,5,6,7,10], 0:7);
+rudderAngle = timeseries([0,10,10,10,10,10,10,10], 0:7);
 
-P = 100;
-I = 0.3;
-D = 0;
+P = 5;
+I = 0.05;
+D = 50;
 simResult = sim('ShipCoureControlModel.slx');
 
 figure;
