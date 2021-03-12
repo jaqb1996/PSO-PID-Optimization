@@ -1,4 +1,3 @@
-clear all; close all;
 % Hulk dynamics parameters
 K = 0.061;
 T1 = 83.5; % [s]
@@ -13,16 +12,6 @@ b3 = 9.77;
 N = 12; % [deg/s]
 PB = 5; % [deg]
 deltaMax = 35; % [deg]
-
-rudderAngle = timeseries([0,10,10,10,10,10,10,10], 0:7);
-
-P = 5;
-I = 0.05;
-D = 50;
-simResult = sim('ShipCoureControlModel.slx');
-
-figure;
-plot(simResult.tout, simResult.psi);
-hold on,
-plot(rudderAngle.Time, rudderAngle.Data(:,:));
-grid
+% Required course settings
+requiredPsi = 15; % [deg]
+stepTime = 0; % [s]
