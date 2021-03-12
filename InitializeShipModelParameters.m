@@ -5,7 +5,7 @@ T1 = 83.5; % [s]
 T2 = 966.3; % [s]
 T3 = 543; % [s]
 % Parameters of nonlinear spiral curve
-b0 = -3.42;
+b0 = -3.43;
 b1 = -7.32;
 b2 = 2.87;
 b3 = 9.77;
