@@ -1,0 +1,1 @@
+loss = mean(abs(simResult.psi - requiredPsi));
