@@ -9,7 +9,7 @@ InitializeShipModelParameters;
 nPop = 10; %wielkosc populacji
 n_iter = 5;
 
-StopTime = 100;
+StopTime = 10000;
 
 Tp = 10.7; %???????????????
 cnt_iter = 0;
@@ -28,9 +28,6 @@ Kd_min = 0; Kd_max = 0.10; % max 0.1??
 
 % PBEST
 Kp_best(nPop) = 0; Ki_best(nPop) = 0; Kd_best(nPop) = 0;
-
-% GBEST
-Kp_BEST = 0; Ki_BEST = 0; Kd_BEST = 0;
 
 %% Losowanie pozycji poczatkowej z przestrzeni rozwiazan
 for i = 1:nPop
@@ -77,30 +74,6 @@ while cnt_iter < n_iter
         Kp_prim(i) = W*(Kp_prim(i) + c1*rand1*(Kp_best(i)-Kp(i)) + c2*rand2*(Kp_BEST-Kp(i)));
         Ki_prim(i) = W*(Ki_prim(i) + c1*rand3*(Ki_best(i)-Ki(i)) + c2*rand4*(Ki_BEST-Ki(i)));
         Kd_prim(i) = W*(Kd_prim(i) + c1*rand5*(Kd_best(i)-Kd(i)) + c2*rand6*(Kd_BEST-Kd(i)));
-
-        if Kp_prim(i) > Kp_max
-            Kp_prim(i) = Kp_max - (Kp_prim(i) - Kp_max);
-        end
-        
-        if Kp_prim(i) < Kp_min
-            Kp_prim(i) = Kp_min + (Kp_min - Kp_prim(i));
-        end
-
-        if Ki_prim(i) > Ki_max
-            Ki_prim(i) = Ki_max - (Ki_prim(i) - Ki_max);
-        end
-        
-        if Ki_prim(i) < Ki_min
-            Ki_prim(i) = Ki_min + (Ki_min - Ki_prim(i));
-        end
-
-        if Kd_prim(i) > Kd_max
-            Kd_prim(i) = Kd_max - (Kd_prim(i) - Kd_max);
-        end
-        
-        if Kd_prim(i) < Kd_min
-            Kd_prim(i) = Kd_min + (Kd_min - Kd_prim(i));
-        end
     end
 
     %% Aktualizacja polozen
