@@ -16,3 +16,5 @@ b3 = 9.77;
 b2 = 2.87;
 b1 = -7.32;
 b0 = -3.43;
+% Using steering machine
+useSteeringMachine = false;

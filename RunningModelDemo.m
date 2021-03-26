@@ -2,8 +2,8 @@ clear all; close all;
 InitializeShipModelParameters;
 P = 1;
 I = 0.001;
-D = 0.0001;
-simResult = sim('ShipCoureControlModel.slx', 'StopTime', '5000');
+D = 0;
+simResult = sim('ShipCoureControlModel.slx', 10000);
 
 figure;
 plot(simResult.tout, simResult.psi);
