@@ -6,13 +6,13 @@ clc; clear all; close all
   
 InitializeShipModelParameters;
 
-nPop = 10; %wielkosc populacji
-n_iter = 5;
+nPop = 5; %wielkosc populacji
+n_iter = 20;
 
-StopTime = 10000;
+StopTime = 5000;
 
 Tp = 10.7; %???????????????
-cnt_iter = 0;
+
 W = 0.73; %wspolczynnik wagowy inercji
 c1 = 2.05;  c2 = 2.05;  %stale przyspieszenia okreslajace jak mocno czasteczki daza do swoich PBEST i GBEST
 
@@ -29,6 +29,10 @@ Kd_min = 0; Kd_max = 0.10; % max 0.1??
 % PBEST
 Kp_best(nPop) = 0; Ki_best(nPop) = 0; Kd_best(nPop) = 0;
 
+% History of positions
+useHistory = true;
+history = zeros(nPop, 3, n_iter + 1);
+whichParticleBest = zeros(1, n_iter + 1);
 %% Losowanie pozycji poczatkowej z przestrzeni rozwiazan
 for i = 1:nPop
     Kp_rand = Kp_min + (Kp_max - Kp_min)*rand(1,1);
@@ -36,6 +40,9 @@ for i = 1:nPop
     Kd_rand = Kd_min + (Kd_max - Kd_min)*rand(1,1);
     
     Kp(i) = Kp_rand;    Ki(i) = Ki_rand;    Kd(i) = Kd_rand;
+    if useHistory
+        history(i,:,1) = [Kp(i), Ki(i), Kd(i)];
+    end
 end
 
 for i = 1:nPop
@@ -61,11 +68,14 @@ Kp_BEST = Kp(1); Ki_BEST = Ki(1); Kd_BEST = Kd(1);
 for i = 1:nPop
     if Je(i) < Je_best
         Je_best = Je(i);
+        if useHistory
+            whichParticleBest(1) = i;
+        end
         Kp_BEST = Kp(i); Ki_BEST = Ki(i); Kd_BEST = Kd(i);
     end
 end
 
-while cnt_iter < n_iter
+for cnt_iter = 1:n_iter
     %% Aktualizacja predkosci
     for i = 1:nPop
         rand1 = rand; rand2 = rand; rand3 = rand;
@@ -106,6 +116,10 @@ while cnt_iter < n_iter
         if Kd(i) < Kd_min
             Kd(i) = Kd_min + (Kd_min - Kd(i));
         end
+        % Add position to history
+        if useHistory
+            history(i,:,cnt_iter + 1) = [Kp(i), Ki(i), Kd(i)];
+        end
     end
     
     %% Sprawdzenie jakosci po aktualizacji
@@ -118,21 +132,30 @@ while cnt_iter < n_iter
      end
 
     %% Porownanie Je, wyznaczenie pbest i gbest
-     for i = 1:nPop         
-         if Je_prim(i) < Je(i)
-             Je(i) = Je_prim(i);
-             Kp_best(i) = Kp(i); Ki_best(i) = Ki(i); Kd_best(i) = Kd(i);
-         end
-
-         if Je(i) < Je_best
-             Je_best = Je(i);
-             Kp_BEST = Kp(i); Ki_BEST = Ki(i); Kd_BEST = Kd(i);
-         end
-     end
-
-     cnt_iter = cnt_iter+1
+    if useHistory
+        whichParticleBest(cnt_iter + 1) = whichParticleBest(cnt_iter);
+    end
+    for i = 1:nPop
+        if Je_prim(i) < Je(i)
+            Je(i) = Je_prim(i);
+            Kp_best(i) = Kp(i); Ki_best(i) = Ki(i); Kd_best(i) = Kd(i);
+        end
+        
+        if Je(i) < Je_best
+            Je_best = Je(i);
+            if useHistory
+                whichParticleBest(cnt_iter + 1) = i;
+            end
+            Kp_BEST = Kp(i); Ki_BEST = Ki(i); Kd_BEST = Kd(i);
+        end
+    end
+    % Show which iteration finished
+    cnt_iter
 end
-
+%% Save history
+if useHistory
+    save('history.mat', 'history', 'whichParticleBest');
+end
 %% Wyniki PID
 
 P = Kp_BEST; I = Ki_BEST; D = Kd_BEST;
