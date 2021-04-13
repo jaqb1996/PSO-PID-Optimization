@@ -81,9 +81,33 @@ for cnt_iter = 1:n_iter
         rand1 = rand; rand2 = rand; rand3 = rand;
         rand4 = rand; rand5 = rand; rand6 = rand;
 
-        Kp_prim(i) = W*(Kp_prim(i) + c1*rand1*(Kp_best(i)-Kp(i)) + c2*rand2*(Kp_BEST-Kp(i)));
-        Ki_prim(i) = W*(Ki_prim(i) + c1*rand3*(Ki_best(i)-Ki(i)) + c2*rand4*(Ki_BEST-Ki(i)));
-        Kd_prim(i) = W*(Kd_prim(i) + c1*rand5*(Kd_best(i)-Kd(i)) + c2*rand6*(Kd_BEST-Kd(i)));
+        Kp_prim(i) = W*Kp_prim(i) + c1*rand1*(Kp_best(i)-Kp(i)) + c2*rand2*(Kp_BEST-Kp(i));
+        Ki_prim(i) = W*Ki_prim(i) + c1*rand3*(Ki_best(i)-Ki(i)) + c2*rand4*(Ki_BEST-Ki(i));
+        Kd_prim(i) = W*Kd_prim(i) + c1*rand5*(Kd_best(i)-Kd(i)) + c2*rand6*(Kd_BEST-Kd(i));
+        
+        if Kp_prim(i) > Kp_max
+            Kp_prim(i) = Kp_max - (Kp_prim(i) - Kp_max);
+        end
+        
+        if Kp_prim(i) < Kp_min
+            Kp_prim(i) = Kp_min + (Kp_min - Kp_prim(i));
+        end
+
+        if Ki_prim(i) > Ki_max
+            Ki_prim(i) = Ki_max - (Ki_prim(i) - Ki_max);
+        end
+        
+        if Ki_prim(i) < Ki_min
+            Ki_prim(i) = Ki_min + (Ki_min - Ki_prim(i));
+        end
+
+        if Kd_prim(i) > Kd_max
+            Kd_prim(i) = Kd_max - (Kd_prim(i) - Kd_max);
+        end
+        
+        if Kd_prim(i) < Kd_min
+            Kd_prim(i) = Kd_min + (Kd_min - Kd_prim(i));
+        end
     end
 
     %% Aktualizacja polozen
