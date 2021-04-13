@@ -31,8 +31,10 @@ Kp_best(nPop) = 0; Ki_best(nPop) = 0; Kd_best(nPop) = 0;
 
 % History of positions
 useHistory = true;
-history = zeros(nPop, 3, n_iter + 1);
-whichParticleBest = zeros(1, n_iter + 1);
+if useHistory
+    history = zeros(nPop, 3, n_iter + 1);
+    whichParticleBest = ones(1, n_iter + 1);
+end
 %% Losowanie pozycji poczatkowej z przestrzeni rozwiazan
 for i = 1:nPop
     Kp_rand = Kp_min + (Kp_max - Kp_min)*rand(1,1);
@@ -86,27 +88,27 @@ for cnt_iter = 1:n_iter
         Kd_prim(i) = W*Kd_prim(i) + c1*rand5*(Kd_best(i)-Kd(i)) + c2*rand6*(Kd_BEST-Kd(i));
         
         if Kp_prim(i) > Kp_max
-            Kp_prim(i) = Kp_max - (Kp_prim(i) - Kp_max);
+            Kp_prim(i) = Kp_max - CalculateExcess(Kp_min, Kp_max, Kp_prim(i));
         end
         
         if Kp_prim(i) < Kp_min
-            Kp_prim(i) = Kp_min + (Kp_min - Kp_prim(i));
+            Kp_prim(i) = Kp_min + CalculateUnderflow(Kp_min, Kp_max, Kp_prim(i));
         end
 
         if Ki_prim(i) > Ki_max
-            Ki_prim(i) = Ki_max - (Ki_prim(i) - Ki_max);
+            Ki_prim(i) = Ki_max - CalculateExcess(Ki_min, Ki_max, Ki_prim(i));
         end
         
         if Ki_prim(i) < Ki_min
-            Ki_prim(i) = Ki_min + (Ki_min - Ki_prim(i));
+            Ki_prim(i) = Ki_min + CalculateUnderflow(Ki_min, Ki_max, Ki_prim(i));
         end
 
         if Kd_prim(i) > Kd_max
-            Kd_prim(i) = Kd_max - (Kd_prim(i) - Kd_max);
+            Kd_prim(i) = Kd_max - CalculateExcess(Kd_min, Kd_max, Kd_prim(i));
         end
         
         if Kd_prim(i) < Kd_min
-            Kd_prim(i) = Kd_min + (Kd_min - Kd_prim(i));
+            Kd_prim(i) = Kd_min + CalculateUnderflow(Kd_min, Kd_max, Kd_prim(i));
         end
     end
 
