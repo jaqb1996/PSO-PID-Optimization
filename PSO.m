@@ -125,9 +125,14 @@ for cnt_iter = 1:n_iter
     %% Sprawdzenie jakosci po aktualizacji
     for i = 1:nPop
         P = Kp(i); I = Ki(i); D = Kd(i);
-        simResult = sim('ShipCoureControlModel.slx', StopTime);
-        CalculateLoss;
-        Je_prim(i) = loss;  
+        try
+            simResult = sim('ShipCoureControlModel.slx', StopTime);
+            CalculateLoss;
+            Je_prim(i) = loss;  
+        catch
+            warning('Problem with simulation. Assigning loss = inf');
+            Je_prim(i) = inf;
+        end
 
      end
 
