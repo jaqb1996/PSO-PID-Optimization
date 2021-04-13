@@ -9,7 +9,7 @@ title('Position of particles')
 for iter = 1:numIter
     for p = 1:numParticles
         grid on;
-        title('Position of particles');
+        title(sprintf('Position of particles [%i]', iter));
         xlim([Kp_min, Kp_max]);
         ylim([Ki_min, Ki_max]);
         zlim([Kd_min, Kd_max]);
@@ -24,5 +24,7 @@ for iter = 1:numIter
         hold on;
     end
     pause(2);
-    clf(f);
+    if iter ~= num_iter
+        clf(f);
+    end
 end
